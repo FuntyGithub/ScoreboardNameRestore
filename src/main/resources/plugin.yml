@@ -1,0 +1,4 @@
+name: ScoreboardNameRestore
+version: '${project.version}'
+main: org.funty.scoreboardnamerestore.Main
+api-version: '1.20'
