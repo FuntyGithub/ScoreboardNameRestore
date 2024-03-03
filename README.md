@@ -1,2 +1,2 @@
 # ScoreboardNameRestore
- Simple Minecraft-Scoreboard name restorer at name change
+ Simple Minecraft-Scoreboard name restorer to restore scores at name changes
