@@ -23,34 +23,30 @@ public class JoinListener implements Listener {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         if (!scoreboard.getScores(player.getUniqueId().toString()).isEmpty()) restoreScore(player.getUniqueId().toString(), player.getName(), false);
 
-        // check if name was used by someone else before
-        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            if (Objects.equals(offlinePlayer.getName(), player.getName()) && offlinePlayer.getUniqueId() != player.getUniqueId()) {
-                // there is another player offline that has the same last known name
-                restoreScore(offlinePlayer.getName(), offlinePlayer.getUniqueId().toString(), false);
-                // TODO: TESTEN:
-                // TODO:          - testen ob loop außerhalb der if ein denkfehler hat
-                // TODO:          - testen ob replace false funktioniert
-                // TODO:          - Testen ob problem hier unten jetzt funktioiniert
-//  TODO:
-//                    Wenn spieler name changed oder das erste mal joint, dann schauen ob es zu dem Namen schon scores gibt, falls ja, temporary moven zu uuid des alten besitzers.
-//                    Für den fall, dass jemand: Name ändert, wer anders den namen nimmt und joint, bevor der alte account wieder gekommen ist
-//  TODO:
-//                    Command oldname -> gibt es jemanden mit dem Namen? -nein-> War es mal sein Name? (HUMAN verification) -ja-> sync
-
-
-                return;
-            }
+        if (!player.hasPlayedBefore()) {
+            compareToOfflineplayers(player);
         }
 
         if (event.getJoinMessage() != null && event.getJoinMessage().contains("formerly known as")) {
             // Name has changed
+            compareToOfflineplayers(player);
 
             // get Names
             String oldName = event.getJoinMessage().replaceAll(".*\\(formerly known as (.+?)\\).*", "$1");
 
             // restore scores
             restoreScore(oldName, player.getName(),true);
+        }
+    }
+
+    public void compareToOfflineplayers(Player player) {
+        // check if name was used by someone else before
+        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+            if (Objects.equals(offlinePlayer.getName(), player.getName()) && offlinePlayer.getUniqueId() != player.getUniqueId()) {
+                // there is another player offline that has the same last known name
+                restoreScore(offlinePlayer.getName(), offlinePlayer.getUniqueId().toString(), false);
+                return;
+            }
         }
     }
 
@@ -72,6 +68,6 @@ public class JoinListener implements Listener {
         scoreboard.resetScores(oldName);
 
         // log to console
-        Bukkit.getLogger().info("[ScoreboardNameRestore] scoreboard data from '"+oldName+"' moved to '"+newName+"'!");
+        Bukkit.getLogger().info("[ScoreboardNameRestore] scoreboard data from '"+oldName+"' moved to '"+newName+"'! ("+(replace ? "replaced":"added")+")");
     }
 }

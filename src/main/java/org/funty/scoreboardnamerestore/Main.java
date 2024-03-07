@@ -3,6 +3,7 @@ package org.funty.scoreboardnamerestore;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.funty.scoreboardnamerestore.commands.ScoreRestoreCommand;
 import org.funty.scoreboardnamerestore.listeners.JoinListener;
 
 public final class Main extends JavaPlugin {
@@ -12,9 +13,13 @@ public final class Main extends JavaPlugin {
         // Plugin startup logic
         Bukkit.getLogger().info("[ScoreboardNameRestore] Enabled!");
 
-        //listener
+        // listener
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), this);
+
+        // commands
+        getCommand("ScoreRestore").setExecutor(new ScoreRestoreCommand());
+        getCommand("ScoreRestore").setTabCompleter(new ScoreRestoreCommand());
     }
 
     @Override
