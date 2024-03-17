@@ -2,22 +2,21 @@ package org.funty.scoreboardnamerestore.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.funty.scoreboardnamerestore.Main;
 
 import java.util.Objects;
 
 public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
+        if (!Main.getPlugin().getConfig().getBoolean("enable-auto-restore")) return;
+
         Player player = event.getPlayer();
 
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();

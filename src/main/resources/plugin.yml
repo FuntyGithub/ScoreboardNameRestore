@@ -6,3 +6,5 @@ author: 'Funty'
 commands:
   ScoreRestore:
     permissions: 'scoreboardnamerestore.scorerestore'
+  PlayerInfo:
+    permission: 'scoreboardnamerestore.playerinfo.use'
